@@ -6,81 +6,62 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Kamar;
 use App\Models\Penghuni;
-use App\Models\Pengaduan;
+
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Akun Admin
-        $admin = User::create([
+        // 1. Membuat akun Admin
+        User::create([
             'name' => 'Admin FauzanKos',
             'email' => 'admin@fauzankos.com',
-            'password' => Hash::make('password123'),
+            'password' => Hash::make('admin123'),
             'role' => 'admin',
             'no_hp' => '081234567890',
         ]);
 
-        // 2. Data Kamar Awal
-        $kamar1 = Kamar::create([
+        // 2. Membuat kamar
+        $kamar = Kamar::create([
             'nomor_kamar' => 'A-01',
             'tipe' => 'VIP AC',
             'harga_per_bulan' => 850000,
             'kapasitas' => 1,
-            'fasilitas' => 'Kasur, Lemari, Meja Belajar, AC, Kamar Mandi Dalam',
+            'fasilitas' => 'Kasur, Lemari, Meja Belajar, AC',
             'status' => 'terisi',
         ]);
 
-        // 3. Akun Penghuni
+        // 3. Membuat akun Penghuni
         $userPenghuni = User::create([
-            'name' => 'Firdhan Andhika',
-            'email' => 'firdhan@gmail.com',
-            'password' => Hash::make('password123'),
+            'name' => 'Penghuni Demo',
+            'email' => 'penghuni@fauzankos.com',
+            'password' => Hash::make('penghuni123'),
             'role' => 'penghuni',
             'no_hp' => '089876543210',
         ]);
 
-        $penghuni = Penghuni::create([
+        // 4. Membuat data profil penghuni
+        Penghuni::create([
             'user_id' => $userPenghuni->id,
-            'kamar_id' => $kamar1->id,
+            'kamar_id' => $kamar->id,
             'nik' => '3509123456780001',
-            'alamat_asal' => 'Jl. Kalimantan No. 10, Jember',
+            'alamat_asal' => 'Jember',
             'pekerjaan' => 'Mahasiswa',
             'nama_kontak_darurat' => 'Budi Santoso',
             'no_kontak_darurat' => '081222333444',
-            'tanggal_masuk' => now()->subMonths(2),
+            'tanggal_masuk' => now(),
             'status' => 'aktif',
         ]);
 
-        // 4. Contoh Data Pengaduan Awal
-        Pengaduan::create([
-            'penghuni_id' => $penghuni->id,
-            'kamar_id' => $kamar1->id,
-            'judul' => 'Kran Air Kamar Mandi Bocor',
-            'kategori' => 'air',
-            'deskripsi' => 'Kran air di wastafel kamar mandi terus menetes meskipun sudah ditutup rapat.',
-            'status' => 'diajukan',
-        ]);
-
-        // 5. Tambah Kamar Kosong & Data Pembayaran Awal
-        \App\Models\Kamar::create([
+        // 5. Membuat kamar kosong
+        Kamar::create([
             'nomor_kamar' => 'A-02',
             'tipe' => 'Reguler Non-AC',
             'harga_per_bulan' => 550000,
             'kapasitas' => 1,
-            'fasilitas' => 'Kasur, Lemari, Meja Belajar, Kamar Mandi Luar',
+            'fasilitas' => 'Kasur, Lemari, Meja Belajar',
             'status' => 'kosong',
-        ]);
-
-        \App\Models\Pembayaran::create([
-         'penghuni_id' => $penghuni->id,
-         'periode_bulan' => now()->month,
-         'periode_tahun' => now()->year,
-         'jumlah' => 850000,
-         'jatuh_tempo' => now()->addDays(5),
-         'status' => 'belum_bayar',
-         'keterangan' => 'Tagihan kos bulan berjalan',
         ]);
     }
 }

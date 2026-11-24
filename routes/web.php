@@ -8,7 +8,15 @@ use App\Http\Controllers\PenghuniController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\PengaduanController;
 
-Route::get('/', fn() => redirect()->route('login'));
+Route::get('/', function () {
+    if (auth()->check()) {
+        return auth()->user()->role === 'admin'
+            ? redirect()->route('admin.dashboard')
+            : redirect()->route('penghuni.dashboard');
+    }
+
+    return redirect()->route('login');
+});
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
