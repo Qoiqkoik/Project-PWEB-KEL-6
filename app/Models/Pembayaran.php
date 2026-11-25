@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Pembayaran extends Model
 {
@@ -19,7 +20,15 @@ class Pembayaran extends Model
         'keterangan',
     ];
 
-    public function penghuni()
+    protected function casts(): array
+    {
+        return [
+            'jatuh_tempo' => 'date',
+            'tanggal_bayar' => 'date',
+        ];
+    }
+
+    public function penghuni(): BelongsTo
     {
         return $this->belongsTo(Penghuni::class);
     }

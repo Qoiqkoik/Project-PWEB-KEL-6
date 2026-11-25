@@ -1,14 +1,14 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KamarController;
-use App\Http\Controllers\PenghuniController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\PengaduanController;
+use App\Http\Controllers\PenghuniController;
+use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn() => redirect()->route('login'));
+Route::get('/', fn () => redirect()->route('login'));
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
@@ -21,6 +21,7 @@ Route::middleware(['auth', 'role:penghuni'])->prefix('penghuni')->name('penghuni
     // Modul 3: Tagihan & Upload Bukti
     Route::get('/pembayaran', [PembayaranController::class, 'indexPenghuni'])->name('pembayaran.index');
     Route::post('/pembayaran/{pembayaran}/upload', [PembayaranController::class, 'uploadBukti'])->name('pembayaran.upload');
+    Route::get('/pembayaran/{pembayaran}/bukti', [PembayaranController::class, 'downloadBukti'])->name('pembayaran.bukti');
 
     // Modul 4: Pengaduan
     Route::get('/pengaduan', [PengaduanController::class, 'indexPenghuni'])->name('pengaduan.index');
@@ -42,6 +43,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/pembayaran', [PembayaranController::class, 'indexAdmin'])->name('pembayaran.index');
     Route::get('/pembayaran/buat', [PembayaranController::class, 'create'])->name('pembayaran.create');
     Route::post('/pembayaran', [PembayaranController::class, 'store'])->name('pembayaran.store');
+    Route::get('/pembayaran/{pembayaran}/edit', [PembayaranController::class, 'edit'])->name('pembayaran.edit');
+    Route::put('/pembayaran/{pembayaran}', [PembayaranController::class, 'update'])->name('pembayaran.update');
+    Route::delete('/pembayaran/{pembayaran}', [PembayaranController::class, 'destroy'])->name('pembayaran.destroy');
+    Route::get('/pembayaran/{pembayaran}/bukti', [PembayaranController::class, 'downloadBukti'])->name('pembayaran.bukti');
     Route::put('/pembayaran/{pembayaran}/konfirmasi', [PembayaranController::class, 'konfirmasi'])->name('pembayaran.konfirmasi');
     Route::get('/laporan-keuangan', [PembayaranController::class, 'laporan'])->name('pembayaran.laporan');
 
